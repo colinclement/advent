@@ -1,6 +1,7 @@
-"""
-Advent of code day 1
-"""
+#[
+# Advent of code day 1
+]#
+
 import strutils, sequtils, intsets
 
 proc parse_file(fname: string): seq[int] =
