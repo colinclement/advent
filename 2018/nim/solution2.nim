@@ -4,7 +4,7 @@
 
 import strutils, sequtils, strformat
 
-proc parse_file(fname: string): seq[string] =
+proc parseFile(fname: string): seq[string] =
   for line in open(fname).lines:
     result.add(line.strip)
 
@@ -27,7 +27,7 @@ proc two_or_three(id: string): TwoThree =
     elif counts[i] == 3:
       result.three = true
 
-proc checksum(idlist: seq[string]): int =
+proc checkSum(idlist: seq[string]): int =
   var
     twos: int
     threes: int
@@ -37,11 +37,28 @@ proc checksum(idlist: seq[string]): int =
     threes += int(twothree.three)
   result = twos * threes
 
+proc commonLetters(idlist: seq[string]): string =
+  var pos = 0
+  for i, id in idlist:
+    for j in i+1..<idlist.len:
+      var ndiff = 0
+      for idx in 0..<id.len:
+        if not(id[idx] == idlist[j][idx]):
+          inc(ndiff)
+          pos = idx
+        if ndiff > 1:
+          break
+      if ndiff == 1:
+        result = id
+        result.delete(pos, pos)
+
 let TEST = @["abcdef", "bababc", "abbcde", "abcccd", "aabcdd",
   "abcdee", "ababab"]
 
-assert checksum(TEST) == 12
+assert checkSum(TEST) == 12
 
-let data = parse_file("../data/input-2.txt")
+let data = parseFile("../data/input-2.txt")
 var answer = checksum(data)
 echo "The Checksum is {answer}".fmt
+var letters = commonLetters(data)
+echo "The shared letters are {letters}".fmt
